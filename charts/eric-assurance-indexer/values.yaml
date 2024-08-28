@@ -1,0 +1,54 @@
+# # Default values for eric-assurance-indexer.
+# # This is a YAML-formatted file.
+# # Declare variables to be passed into your templates.
+labels: {}
+annotations: {}
+nameOverride: ""
+
+global:
+  hosts:
+    iam: ""
+  registry:
+    url: armdocker.rnd.ericsson.se
+    imagePullPolicy: "IfNotPresent"
+  pullSecret: "k8s-registry-secret"
+  networkPolicy:
+    enabled: true
+  serviceMesh:
+    enabled: true
+    ingress:
+      enabled: false
+  ingressClass: "oss_iccr"
+  log:
+    streamingMethod: "direct"
+  security:
+    tls:
+      enabled: false
+  logShipper:
+    deployment:
+      type: "sidecar"
+
+minReadySeconds: 0
+terminationGracePeriodSeconds: 30
+topologySpreadConstraints: []
+tolerations: []
+
+service:
+  port: 80
+
+apiGateway:
+  hostname: eric-eo-api-gateway
+
+ingress:
+  tls:
+    passthrough: false
+    secretName: iam-tls-secret
+
+gateway:
+  appName: service-mesh-ingress-gateway
+
+eric-log-shipper:
+  enabled: true
+  global:
+    security:
+      tls: false

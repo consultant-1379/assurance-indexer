@@ -1,0 +1,25 @@
+# # The explanation of this file is present in docs/service-mesh.md
+# # This is an optional component of service mesh that can be introduced to a helm chart application depending on the condition when an application inside SM wants to communicate to another application outside SM using mTLS.
+{{- $serviceMesh := include "eric-assurance-indexer.service-mesh.enabled" . | trim -}}
+{{- $tls := include "eric-assurance-indexer.global-security-tls-enabled" . | trim -}}
+{{- if and (eq $serviceMesh "true") (eq $tls "true") -}}
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ template "eric-assurance-indexer.name" . }}-gas-destinationrule
+  annotations:
+    {{- include "eric-assurance-indexer.helm-annotations" .| nindent 4 }}
+  labels:
+    {{- include "eric-assurance-indexer.kubernetes-io-info" .| nindent 4 }}
+spec:
+  host: eric-adp-gui-aggregator-service-http
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 3000
+        tls:
+          mode: MUTUAL
+          clientCertificate: /etc/istio/tls/cert.pem
+          privateKey: /etc/istio/tls/key.pem
+          caCertificates: /etc/istio/tls-ca/cacertbundle.pem
+{{- end }}

@@ -1,0 +1,4 @@
+-DhelmDesignRule.config.DR-D1121-064=skip
+-DhelmDesignRule.config.DR-D1121-067=skip
+-DhelmDesignRule.config.eric-oss-assurance-indexer.DR-D1123-113=exempt
+-DhelmDesignRule.config.DR-D1123-134=disable
